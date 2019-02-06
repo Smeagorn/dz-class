@@ -1,0 +1,98 @@
+
+class Report 
+{
+
+    public $id;
+    public $name;
+    public $text;
+    public $author;
+    public $dates;
+    public $numberrevision;
+    public $dateoflastedit;
+
+
+    public function __construct($id,$name,$text,$author,$dates /,$numberrevision,$dateoflastedit/)
+   {
+        $this->id = $id;
+        $this->name = $name;
+        $this->text = $text;
+        $this->author = $author;
+        $this->date = $dates;
+//        $this->numberrevision = $numberrevision;
+//        $this->dateoflastedit = $dateoflastedit;
+        $this->ReporOut();
+
+    }
+    public function FullName()
+    {
+
+       preg_match_all('/ (.)/iu',$this->author,$m);
+        $m2 = explode(' ', $this->author);
+        $this->author = $m2[0] .' '. $m[1][0]. '.' . $m[1][1].'.';
+        return "ФИО АВТОРА ".$this->author;
+    }
+    public function BigName()
+    {
+        return strtoupper($this->name);
+    }
+    public function trimText()
+    {
+        return trim($this-> text);
+    }
+
+    public function ReporOut ()
+    {
+        $author=$this->FullName();
+        $name=$this->BigName();
+        $text=$this->trimText();
+        $a = [$author,$name,$text];
+        print_r( $a);
+    }
+}
+class YearRepor extends Report
+{
+    public function __construct($id, $name, $text, $author, $dates)
+    {
+        $years = $this->YearsDate($dates);
+        parent::__construct($id, $name, $text, $author, $years);
+    }
+
+    public function YearsDate($dates)
+    {
+        return $dateY = date('Y').$this->date;
+    }
+}
+
+class MonthRepor extends Report
+{
+    public function __construct($id, $name, $text, $author, $dates)
+    {
+        $month = $this->MonthDate($dates);
+        parent::__construct($id, $name, $text, $author, $dates);
+    }
+
+    public function MonthDate($dates)
+    {
+       return $dateM = date('M').$this->date;
+    }
+}
+
+class WeekRepor extends Report
+{
+    public  function __construct($id, $name, $text, $author, $dates)
+    {
+        $days = $this->DayDate($dates);
+        parent::__construct($id, $name, $text, $author, $dates);
+    }
+
+    public function DayDate($dates)
+    {
+        return $dateW = date('W').$this->date;
+    }
+}
+$docYears = new YearRepor (1,"Отчет номер 1 ","    Информация в файле 1    ",'Ковалев Александр Анатольевич', 15-10-1996);
+var_dump($docYears->BigName());
+echo '<br>';
+$docYears = new MonthRepor (2,"Отчет номер 2 ","    Информация в файле 2    ",'Александр Ковалев Анатольевич', 15-10-1996);
+echo '<br>';
+$docYears = new WeekRepor (3,"Отчет номер 3 ","    Информация в файле 3    ",'Анатольевич Ковалев Александр ', 15-10-1996);
